@@ -1,19 +1,17 @@
-import {PaginationView} from "../interfaces";
 import {PaginationViewParam} from "./pagination-view-param";
+import {BaseView} from "../base-view";
 
-export class DefaultPaginationView implements PaginationView {
-    selector: string;
-
+export class DefaultPaginationView extends BaseView {
     constructor(selector: string) {
-        this.selector = selector;
+        super(selector);
     }
 
 
-    public render(paginationParams: PaginationViewParam) {
+    public render(paginationParams: PaginationViewParam): void {
         document.querySelector(this.selector).innerHTML = this.generateTemplate(+paginationParams.currentPage, +paginationParams.pagesTotal, paginationParams.itemsOnPage, paginationParams.itemCount);
     }
 
-    generatePagesArrangementRef(currentPage: number, pageCount: number) {
+    generatePagesArrangementRef(currentPage: number, pageCount: number): string {
         const delta = 2;
         let range = [];
         for (let i = Math.max(2, currentPage - delta); i <= Math.min(pageCount - 1, currentPage + delta); i++) {
@@ -32,7 +30,7 @@ export class DefaultPaginationView implements PaginationView {
         return range.join('')
     }
 
-    private generateTemplate(current: number, last: number, itemsOnPage: number, totalElements: number) {
+    private generateTemplate(current: number, last: number, itemsOnPage: number, totalElements: number):string {
         return `
 
                 <div class="number">${this.generatePagesArrangementRef(current, last).toString()}</div>

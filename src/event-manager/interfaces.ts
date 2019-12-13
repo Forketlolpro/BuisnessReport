@@ -5,6 +5,6 @@ export interface EventManager {
 }
 
 export interface Listener {
-    update(event: string, data: any): void;
+    update<T>(event: string, data: T): void;
 }
 
