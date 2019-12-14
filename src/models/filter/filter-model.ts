@@ -1,81 +1,48 @@
-import {EventManager} from "../../event-manager/interfaces";
-import {FilterView} from "../../views/interfaces";
+export enum FilterModelProperty {
+    min = 'min',
+    max = 'max',
+    selectMin = 'selectMin',
+    selectMax = 'selectMax',
+}
 
 export class FilterModel {
-    public filteredData: [];
-    private view: FilterView;
+    private filteredData: [];
     private data: any;
     private filterModel: any;
-    private eventManager: EventManager;
 
-    constructor(view: FilterView, eventManager: EventManager) {
-        this.eventManager = eventManager;
-        this.view = view;
-        document.querySelector(this.view.selector).addEventListener('submit', this.submitEventHandler);
-        document.querySelector(this.view.selector).addEventListener('focusout', this.focusoutEventHandler);
-        document.querySelector(this.view.selector).addEventListener('keydown', this.keypressEventHandler);
-        document.querySelector(this.view.selector).addEventListener('click', this.clickEventHandler);
+    constructor() {
     }
 
-    initialize(data, model) {
+    initNewData(data, model) {
         this.filterModel = model;
         this.data = data;
         this.calculateRange();
         this.filter();
-        this.show();
     }
 
-    clickEventHandler = (e) => {
-        e.stopPropagation();
-        if (e.target.className === 'resetFilter') {
-            this.filterModel[e.target.dataset['property']].selectMin = this.filterModel[e.target.dataset['property']].min;
-            this.filterModel[e.target.dataset['property']].selectMax = this.filterModel[e.target.dataset['property']].max;
-            this.show();
-        }
-    };
+    public getFilteredData() {
+        return this.filteredData;
+    }
 
-    keypressEventHandler = (e) => {
-        if (e.code === 'Enter') {
-            e.preventDefault();
-        }
-    };
+    public getFilterModel() {
+        return this.filterModel;
+    }
 
-    focusoutEventHandler = (e) => {
-        if (e.target.tagName === 'BUTTON') {
-            return true;
-        }
-        let elem = e.target;
-        if (elem.value <= this.filterModel[elem.dataset['property']].min) {
-            e.target.value = this.filterModel[elem.dataset['property']].min;
-        }
-        if (elem.value >= this.filterModel[elem.dataset['property']].max) {
-            e.target.value = this.filterModel[elem.dataset['property']].max;
-        }
+    public setFilterModelProperty(property: string, type: FilterModelProperty, value: number) {
+        this.filterModel[property][type] = value;
+    }
 
-        this.filterModel[elem.dataset['property']]['select' + elem.dataset['use']] = +elem.value;
-        this.show();
-    };
+    public getFilterModelValue(property: string, type: FilterModelProperty) {
+        type
+        return this.filterModel[property][type];
+    }
 
-    submitEventHandler = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        for (let i = 0; i < e.target.length - 1; i++) {
-            if (e.target[i].dataset['use'] === 'Min') {
-                this.filterModel[e.target[i].dataset['property']].selectMin = +e.target[i].value;
-            }
-            if (e.target[i].dataset['use'] === 'Max') {
-                this.filterModel[e.target[i].dataset['property']].selectMax = +e.target[i].value;
-            }
-        }
-        this.filter();
-        this.eventManager.notify('filterChange', this.filteredData);
-    };
+    public resetFilter(property: string) {
+        this.filterModel[property].selectMin = this.filterModel[property].min;
+        this.filterModel[property].selectMax = this.filterModel[property].max;
+    }
 
-    show(): void {
-        this.view.render(this.filterModel);
-    };
-
-    private filter() {
+    public filter() {
         let self = this;
         this.filteredData = this.data.filter(item => {
             return Object.keys(this.filterModel).every(key => {
