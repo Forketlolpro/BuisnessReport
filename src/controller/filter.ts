@@ -1,12 +1,13 @@
 import { Controller } from "./controller";
 import { FilterModel, FilterModelProperty } from "../models/filter/filter-model";
 import { DefaultFilterView } from "../views/filter/filter-view";
+import { FilterConfig } from "../models/filter/filter-config-item";
 
-export class Filter extends Controller {
-    model: FilterModel;
+export class Filter<T> extends Controller {
+    model: FilterModel<T>;
     view: DefaultFilterView;
 
-    constructor(model: FilterModel, view: DefaultFilterView) {
+    constructor(model: FilterModel<T>, view: DefaultFilterView) {
         super();
         this.model = model;
         this.view = view;
@@ -17,28 +18,24 @@ export class Filter extends Controller {
         document.querySelector(this.view.selector).addEventListener('focusout', this.focusoutEventHandler);
     }
 
-    public initNewData (data: any, filterModel: any) {
+    public initNewData (data: T[], filterModel: FilterConfig): void {
         this.model.initNewData(data, filterModel);
         this.view.render(this.model.getFilterModel());
     }
 
-    private submitEventHandler = (e: Event) => {
+    private submitEventHandler = (e: Event):void => {
         e.preventDefault();
         e.stopPropagation();
         let elem = e.target as HTMLFormElement;
         for (let i = 0; i < elem.length - 1; i++) {
-            if (e.target[i].dataset['use'] === 'Min') {
-                this.model.setFilterModelProperty(e.target[i].dataset['property'], FilterModelProperty.selectMin ,+e.target[i].value);
-            }
-            if (e.target[i].dataset['use'] === 'Max') {
-                this.model.setFilterModelProperty(e.target[i].dataset['property'], FilterModelProperty.selectMax ,+e.target[i].value);
-            }
+            let input = elem[i] as HTMLInputElement; 
+            this.model.setFilterModelProperty(input.dataset['property'], input.dataset['use'] as FilterModelProperty ,+input.value);
         }
         this.model.filter();
         this.notify('filterChange', this.model.getFilteredData());
     }
 
-    private clickEventHandler = (e: Event) => {
+    private clickEventHandler = (e: Event):void => {
         e.stopPropagation();
         let elem = e.target as HTMLElement;
         if (elem.className === 'resetFilter') {
@@ -47,25 +44,25 @@ export class Filter extends Controller {
         }
     }
 
-    private keypressEventHandler = (e: KeyboardEvent) => {
+    private keypressEventHandler = (e: KeyboardEvent): void => {
         if (e.code === 'Enter') {
             e.preventDefault();
         }
     };
 
-    private focusoutEventHandler = (e) => {
-        if (e.target.tagName === 'BUTTON') {
+    private focusoutEventHandler = (e: Event): boolean => {
+        let elem = e.target as HTMLInputElement;
+        if (elem.tagName === 'BUTTON') {
             return true;
         }
-        let elem = e.target as HTMLInputElement;
-        if (elem.value <= this.model.getFilterModelValue(elem.dataset['property'], FilterModelProperty.min)) {
-            e.target.value = this.model.getFilterModelValue(elem.dataset['property'], FilterModelProperty.min);
+        if (+elem.value <= this.model.getFilterModelValue(elem.dataset['property'], FilterModelProperty.min)) {
+            elem.value = this.model.getFilterModelValue(elem.dataset['property'], FilterModelProperty.min).toString();
         }
-        if (elem.value >= this.model.getFilterModelValue(elem.dataset['property'], FilterModelProperty.max)) {
-            e.target.value = this.model.getFilterModelValue(elem.dataset['property'], FilterModelProperty.max);
+        if (+elem.value >= this.model.getFilterModelValue(elem.dataset['property'], FilterModelProperty.max)) {
+            elem.value = this.model.getFilterModelValue(elem.dataset['property'], FilterModelProperty.max).toString();
         }
 
-        this.model.setFilterModelProperty(elem.dataset['property'], 'select' + elem.dataset['use'] as FilterModelProperty, +elem.value);
+        this.model.setFilterModelProperty(elem.dataset['property'], elem.dataset['use'] as FilterModelProperty, +elem.value);
         this.view.render(this.model.getFilterModel());
     };
 }

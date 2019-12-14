@@ -1,14 +1,13 @@
-import {FilterView} from "../interfaces";
+import { BaseView } from "../base-view";
+import { FilterConfig, FilterConfigItem } from "../../models/filter/filter-config-item";
 
 
-export class DefaultFilterView implements FilterView {
-    selector: string;
-
+export class DefaultFilterView extends BaseView {
     constructor(selector: string) {
-        this.selector = selector
+        super(selector);
     }
 
-    generateResetButton(item) {
+    generateResetButton(item: [string, FilterConfigItem]):string {
         if (item[1].selectMin > item[1].min || item[1].selectMax < item[1].max) {
             return `<button data-property="${item[0]}" type="reset" class="resetFilter">&#10005;</button>`
         }
@@ -16,32 +15,31 @@ export class DefaultFilterView implements FilterView {
         return ``;
     }
 
-    generateFilterItem(item) {
-        let inputMinValue = (item[1]['selectMin'] && item[1]['selectMin'] >= item[1]['min']) ? item[1]['selectMin'] : item[1]['min'];
-        let inputMaxValue = (item[1]['selectMax'] && item[1]['selectMax'] <= item[1]['max']) ? item[1]['selectMax'] : item[1]['max'];
+    generateFilterItem(item: [string, FilterConfigItem]):string {
+        let inputMinValue = (item[1].selectMin && item[1].selectMin >= item[1].min) ? item[1].selectMin : item[1].min;
+        let inputMaxValue = (item[1].selectMax && item[1].selectMax <= item[1].max) ? item[1].selectMax : item[1].max;
         return `<div>
-                    <label>${item[1]['title']}: </label>
-                    <input class="form-control" data-use="Min" data-property="${item[0]}" value="${inputMinValue}" type="number">
-                    <input class="form-control" data-use="Max" data-property="${item[0]}" value="${inputMaxValue}" type="number">
+                    <label>${item[1].title}: </label>
+                    <input class="form-control" data-use="selectMin" data-property="${item[0]}" value="${inputMinValue}" type="number">
+                    <input class="form-control" data-use="selectMax" data-property="${item[0]}" value="${inputMaxValue}" type="number">
                     ${this.generateResetButton(item)}
                 </div>`
     }
 
-    generateFilterForm(model) {
+    generateFilterForm(config: FilterConfig):string {
         return `<form>
-                    ${Object.entries(model).map((item) => {
+                    ${Object.entries(config).map((item) => {
             return this.generateFilterItem(item);
         }).join(' ')}
                     <button class="btn btn-primary"type="submit">Apply</button>
                 </form>`
     }
 
-    generateTemplate(model) {
-        return `<h2>Filters</h2>${this.generateFilterForm(model)}`
+    generateTemplate(config: FilterConfig):string {
+        return `<h2>Filters</h2>${this.generateFilterForm(config)}`
     }
 
-    render(...args: any[]): void {
-        let model = args[0];
-        document.querySelector(this.selector).innerHTML = this.generateTemplate(model);
+    render(config: FilterConfig): void {
+        document.querySelector(this.selector).innerHTML = this.generateTemplate(config);
     }
 }

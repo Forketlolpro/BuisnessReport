@@ -7,7 +7,7 @@ import {ReportItem} from "./data-models/report-item";
 import { Filter } from "./controller/filter";
 import { FilterModel } from "./models/filter/filter-model";
 import { DefaultFilterView } from "./views/filter/filter-view";
-import { FilterConfigItem } from './models/filter/filter-config-item';
+import { FilterConfigItem, FilterConfig } from './models/filter/filter-config-item';
 
 export class App implements Listener {
     constructor() {
@@ -15,7 +15,7 @@ export class App implements Listener {
         paginator.attach('pagiChange', this);
         paginator.initNewData(get('product'));
 
-        let filterConfig = {
+        let filterConfig: FilterConfig = {
             displays: new FilterConfigItem('Displays'),
             orders: new FilterConfigItem('Purchases'),
             clicks: new FilterConfigItem('Clicks '),
@@ -25,7 +25,7 @@ export class App implements Listener {
             profit: new FilterConfigItem('Profit')
         };
 
-        let filter = new Filter(new FilterModel(), new DefaultFilterView('.filter'));
+        let filter = new Filter<ReportItem>(new FilterModel(), new DefaultFilterView('.filter'));
         filter.attach('filterChange', this);
         filter.initNewData(get('product'), filterConfig);
     }

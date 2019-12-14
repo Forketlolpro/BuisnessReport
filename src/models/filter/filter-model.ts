@@ -1,3 +1,5 @@
+import { FilterConfig } from "../filter/filter-config-item";
+
 export enum FilterModelProperty {
     min = 'min',
     max = 'max',
@@ -5,44 +7,43 @@ export enum FilterModelProperty {
     selectMax = 'selectMax',
 }
 
-export class FilterModel {
-    private filteredData: [];
-    private data: any;
-    private filterModel: any;
+export class FilterModel<T> {
+    private filteredData: T[];
+    private data: T[];
+    private filterModel: FilterConfig;
 
     constructor() {
     }
 
-    initNewData(data, model) {
+    initNewData(data: T[], model: FilterConfig):void {
         this.filterModel = model;
         this.data = data;
         this.calculateRange();
         this.filter();
     }
 
-    public getFilteredData() {
+    public getFilteredData(): T[] {
         return this.filteredData;
     }
 
-    public getFilterModel() {
+    public getFilterModel():FilterConfig {
         return this.filterModel;
     }
 
-    public setFilterModelProperty(property: string, type: FilterModelProperty, value: number) {
+    public setFilterModelProperty(property: string, type: FilterModelProperty, value: number):void {
         this.filterModel[property][type] = value;
     }
 
-    public getFilterModelValue(property: string, type: FilterModelProperty) {
-        type
+    public getFilterModelValue(property: string, type: FilterModelProperty):number {
         return this.filterModel[property][type];
     }
 
-    public resetFilter(property: string) {
+    public resetFilter(property: string):void {
         this.filterModel[property].selectMin = this.filterModel[property].min;
         this.filterModel[property].selectMax = this.filterModel[property].max;
     }
 
-    public filter() {
+    public filter():void {
         let self = this;
         this.filteredData = this.data.filter(item => {
             return Object.keys(this.filterModel).every(key => {
@@ -51,7 +52,7 @@ export class FilterModel {
         });
     };
 
-    private calculateRange() {
+    private calculateRange():void {
         this.data.forEach(item => {
             Object.keys(this.filterModel).forEach(key => {
                 if (item[key] > this.filterModel[key].max) {

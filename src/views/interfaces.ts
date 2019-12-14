@@ -1,5 +1,6 @@
 import {PaginationViewParam} from "./pagination/pagination-view-param";
 import {SortModel} from "../models/table/sort-model";
+import {FilterConfig} from '../models/filter/filter-config-item';
 
 export interface BaseView {
     selector: string;
@@ -12,9 +13,9 @@ export interface TableView<ReportItem> extends BaseView {
 }
 
 export interface FilterView extends BaseView {
-    render(filters: any[]): void;
+    render(filters: FilterConfig): void;
 }
 
-// export interface PaginationView extends BaseView {
-//     render(paginationParams: PaginationViewParam): void;
-// }
+export interface PaginationView extends BaseView {
+    render(paginationParams: PaginationViewParam): void;
+}

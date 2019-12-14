@@ -1,3 +1,8 @@
+export interface FilterConfig {
+    [key: string]: FilterConfigItem;
+}
+
+
 export class FilterConfigItem {
     title: string;
     min: number = Number.MAX_SAFE_INTEGER;
