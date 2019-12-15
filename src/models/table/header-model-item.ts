@@ -1,3 +1,7 @@
+export interface RowConfig {
+    [key: string]: HeaderModelItem;
+}
+
 export class HeaderModelItem {
     title: string;
     sortable: boolean;

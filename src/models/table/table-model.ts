@@ -1,47 +1,48 @@
 import {SortModel} from "./sort-model";
 import {sortFunc} from "../../helpers/sort-func";
+import { RowConfig } from "./header-model-item";
 
 
-export class TableModel {
-    private data: [];
-    private visibleData: Array<any>;
-    private headerModel: object;
+export class TableModel<T> {
+    private data: T[];
+    private visibleData: T[];
+    private rowConfig: RowConfig;
     private sortingModel: SortModel;
-    private sortedData: any[];
+    private sortedData: T[];
 
     constructor() {
         this.sortingModel = new SortModel();
     }
 
-    initNewData(headerModel?, body?, originalData?) {
+    initNewData(rowConfig?: RowConfig, body?: T[], originalData?: T[]): void {
         if (originalData) {
             this.data = originalData;
             this.sortedData = [...originalData];
             this.sortingModel.prop = '';
         } 
-        if (headerModel && body) {
-            this.headerModel = headerModel;
+        if (rowConfig && body) {
+            this.rowConfig = rowConfig;
             this.visibleData = body;
         }
     }
 
-    public getHeaderModel() {
-        return this.headerModel;
+    public getHeaderModel(): RowConfig {
+        return this.rowConfig;
     }
 
-    public getSorterData() {
+    public getSorterData(): T[] {
         return this.sortedData;
     }
 
-    public getVisibleData() {
+    public getVisibleData(): T[] {
         return this.visibleData;
     }
 
-    public getSortModel() {
+    public getSortModel(): SortModel {
         return this.sortingModel;
     }
 
-    public setSortingModel(key: string) {
+    public setSortingModel(key: string): void {
         if (key !== this.sortingModel.prop) {
             this.sortingModel.prop = key;
             this.sortingModel.direction = 'desc';
@@ -52,7 +53,7 @@ export class TableModel {
         this.sort()
     }
 
-    switchSortDirection() {
+    switchSortDirection(): void {
         if (!this.sortingModel.direction) {
             this.sortingModel.direction = 'desc';
         } else if (this.sortingModel.direction === 'desc') {
@@ -62,7 +63,7 @@ export class TableModel {
         }
     }
 
-    sort() {
+    sort(): void {
         if (this.sortingModel.direction) {
             this.sortedData.sort(sortFunc(this.sortingModel.prop, this.sortingModel.direction));
         }

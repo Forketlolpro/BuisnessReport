@@ -11,13 +11,13 @@ import { FilterConfigItem, FilterConfig } from './models/filter/filter-config-it
 import { Table } from "./controller/table";
 import { TableModel } from "./models/table/table-model";
 import { DefaultTableView } from "./views/table/table-view";
-import { HeaderModelItem } from "./models/table/header-model-item";
+import { HeaderModelItem, RowConfig } from "./models/table/header-model-item";
 
 export class App implements Listener {
     paginator: Paginator<ReportItem>;
     filter: Filter<ReportItem>;
-    table: Table;
-    rowConfig: any;
+    table: Table<ReportItem>;
+    rowConfig: RowConfig;
 
     constructor() {
         this.paginator = new Paginator<ReportItem>(new PaginatorModel(), new DefaultPaginationView('.pagination'));
@@ -50,14 +50,12 @@ export class App implements Listener {
             profit: new HeaderModelItem('Profit', true)
         };
 
-        this.table = new Table(new TableModel(), new DefaultTableView('.table'));
+        this.table = new Table<ReportItem>(new TableModel(), new DefaultTableView('.table'));
         this.table.attach('tableChange', this);
         this.table.initNewData(this.rowConfig, this.paginator.getCurrentPageData(), get('product'))
     }
 
     update(event: string, data: any): void {
-        console.log(event);
-        console.log(data);
         if (event === 'tableChange')
             this.tableHandler(data);
         if (event === 'pagiChange')
@@ -66,7 +64,7 @@ export class App implements Listener {
             this.filterHandler(data);
     }
 
-    paginationHandler = (currentPageData: any[]): void => {
+    paginationHandler = (currentPageData: ReportItem[]): void => {
         this.table.initNewData(this.rowConfig, currentPageData)
     };
 
