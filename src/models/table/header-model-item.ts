@@ -5,9 +5,11 @@ export interface RowConfig {
 export class HeaderModelItem {
     title: string;
     sortable: boolean;
+    renderFunc: (value: string) => string;
 
-    constructor(title: string, sortable: boolean, roundAmount?: number, currency?: string) {
+    constructor(title: string, sortable: boolean, renderFunc?: (value: string) => string) {
         this.title = title;
         this.sortable = sortable;
+        this.renderFunc = renderFunc;
     }
 }

@@ -1,98 +1,80 @@
-// import {TableModel} from "../models/table/table-model";
-// import {FilterModel} from "../models/filter/filter-model";
-// import {get} from "../helpers/fetch";
-// import {DefaultFilterView} from "../views/filter/filter-view";
-// import {PaginatorModel} from "../models/pagination/pagination-model";
-// import {EventManager, Listener} from "../event-manager/interfaces";
-// import {TableEventManager} from "../event-manager/table-event-manager";
-// import {DefaultPaginationView} from "../views/pagination/pagination-view";
-// import {DefaultTableView} from "../views/table/table-view";
-// import {FilterConfigItem} from "../models/filter/filter-config-item";
-// import {HeaderModelItem} from "../models/table/header-model-item";
-// import {ReportItem} from "../data-models/report-item";
-//
-// export class ProductTable implements Listener {
-//     private paginator: PaginatorModel;
-//     private table: TableModel;
-//     private filter: FilterModel;
-//     private eventManager: EventManager;
-//     private data: any[];
-//     private filterConfig: any;
-//     private rowConfig: any;
-//
-//     constructor() {
-//         this.data = get('product');
-//         this.setFilterModel();
-//         this.setRowModel();
-//
-//
-//         this.eventManager = new TableEventManager();
-//         this.eventManager.attach('tableSortChange', this);
-//         this.eventManager.attach('paginationChange', this);
-//         this.eventManager.attach('filterChange', this);
-//
-//
-//         this.filter = new FilterModel(new DefaultFilterView('.report-table .filter'), this.eventManager);
-//         this.filter.initialize(this.data, this.filterConfig);
-//
-//
-//         this.paginator = new PaginatorModel(new DefaultPaginationView('.report-table .paginator'), this.eventManager);
-//         this.paginator.initNewData(this.data);
-//
-//
-//         this.table = new TableModel(new DefaultTableView('.report-table .table'), this.eventManager);
-//         this.table.updateOriginalData(this.data);
-//         this.table.updateData(this.rowConfig, this.paginator.currentPageData);
-//     }
-//
-//     setFilterModel() {
-//         this.filterConfig = {
-//             displays: new FilterConfigItem('Displays'),
-//             orders: new FilterConfigItem('Purchases'),
-//             clicks: new FilterConfigItem('Clicks '),
-//             abandonedUnits: new FilterConfigItem('Abandoned Units'),
-//             soldUnits: new FilterConfigItem('Sold units'),
-//             revenue: new FilterConfigItem('Revenue'),
-//             profit: new FilterConfigItem('Profit')
-//         };
-//     }
-//
-//     setRowModel() {
-//         this.rowConfig = {
-//             image: new HeaderModelItem('', false),
-//             displayName: new HeaderModelItem('Title', false),
-//             displays: new HeaderModelItem('Displays', true),
-//             orders: new HeaderModelItem('Purchase', true),
-//             clicks: new HeaderModelItem('Clicks', true),
-//             abandonedUnits: new HeaderModelItem('Abandoned Units', true),
-//             soldUnits: new HeaderModelItem('Sold units', true),
-//             revenue: new HeaderModelItem('Revenue', true),
-//             profit: new HeaderModelItem('Profit', true)
-//         };
-//     }
-//
-//
-//     update(event: string, data: any): void {
-//         if (event === 'tableSortChange')
-//             this.tableHandler(data);
-//         if (event === 'paginationChange')
-//             this.paginationHandler(data);
-//         if (event === 'filterChange')
-//             this.filterHandler(data);
-//     }
-//
-//     paginationHandler = (currentPageData: any): void => {
-//         this.table.updateData(this.rowConfig, currentPageData)
-//     };
-//
-//     tableHandler = (data: ReportItem): void => {
-//         this.paginator.initNewData(data);
-//         this.table.updateData(this.rowConfig, this.paginator.currentPageData);
-//     };
-//
-//     filterHandler = (data: ReportItem): void => {
-//         this.paginator.initNewData(data);
-//         this.table.updateOriginalData(data);
-//         this.table.updateData(this.rowConfig, this.paginator.currentPageData);
-//     };
-// }
+import {Paginator} from "../controller/paginator";
+import {PaginatorModel} from "../models/pagination/pagination-model";
+import {DefaultPaginationView} from "../views/pagination/pagination-view";
+import {get} from "../helpers/fetch";
+import {Listener} from "../event-manager/interfaces";
+import {ReportItem} from "../data-models/report-item";
+import { Filter } from "../controller/filter";
+import { FilterModel } from "../models/filter/filter-model";
+import { DefaultFilterView } from "../views/filter/filter-view";
+import { FilterConfigItem, FilterConfig } from '../models/filter/filter-config-item';
+import { Table } from "../controller/table";
+import { TableModel } from "../models/table/table-model";
+import { DefaultTableView } from "../views/table/table-view";
+import { HeaderModelItem, RowConfig } from "../models/table/header-model-item";
+
+export class ProductTable implements Listener {
+    paginator: Paginator<ReportItem>;
+    filter: Filter<ReportItem>;
+    table: Table<ReportItem>;
+    rowConfig: RowConfig;
+
+    constructor() {
+        this.paginator = new Paginator<ReportItem>(new PaginatorModel(), new DefaultPaginationView('.product-table .pagination'));
+        this.paginator.attach('pagiChange', this);
+        this.paginator.initNewData(get('product'));
+
+        let filterConfig: FilterConfig = {
+            displays: new FilterConfigItem('Displays'),
+            orders: new FilterConfigItem('Purchases'),
+            clicks: new FilterConfigItem('Clicks '),
+            abandonedUnits: new FilterConfigItem('Abandoned Units'),
+            soldUnits: new FilterConfigItem('Sold units'),
+            revenue: new FilterConfigItem('Revenue'),
+            profit: new FilterConfigItem('Profit')
+        };
+
+        this.filter = new Filter<ReportItem>(new FilterModel(), new DefaultFilterView('.product-table .filter'));
+        this.filter.attach('filterChange', this);
+        this.filter.initNewData(get('product'), filterConfig);
+
+        this.rowConfig = {
+            image: new HeaderModelItem('', false,  (value: string) => `<img src="${'https://s3.eu-central-1.amazonaws.com/showcase-demo-images/fashion/images/' + value}">`),
+            displayName: new HeaderModelItem('Title', false),
+            displays: new HeaderModelItem('Displays', true),
+            orders: new HeaderModelItem('Purchase', true),
+            clicks: new HeaderModelItem('Clicks', true),
+            abandonedUnits: new HeaderModelItem('Abandoned Units', true),
+            soldUnits: new HeaderModelItem('Sold units', true),
+            revenue: new HeaderModelItem('Revenue', true),
+            profit: new HeaderModelItem('Profit', true, (value: string) => value+'$')
+        };
+
+        this.table = new Table<ReportItem>(new TableModel(), new DefaultTableView('.product-table .table'));
+        this.table.attach('tableChange', this);
+        this.table.initNewData(this.rowConfig, this.paginator.getCurrentPageData(), get('product'))
+    }
+
+    update(event: string, data: any): void {
+        if (event === 'tableChange')
+            this.tableHandler(data);
+        if (event === 'pagiChange')
+            this.paginationHandler(data);
+        if (event === 'filterChange')
+            this.filterHandler(data);
+    }
+
+    paginationHandler = (currentPageData: ReportItem[]): void => {
+        this.table.initNewData(this.rowConfig, currentPageData)
+    };
+
+    tableHandler = (data: ReportItem[]): void => {
+        this.paginator.initNewData(data);
+        this.table.initNewData(this.rowConfig, this.paginator.getCurrentPageData());
+    };
+
+    filterHandler = (data: ReportItem[]): void => {
+        this.paginator.initNewData(data);
+        this.table.initNewData(this.rowConfig,  this.paginator.getCurrentPageData(), data);
+    };
+}

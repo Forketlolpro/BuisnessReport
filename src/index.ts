@@ -1,4 +1,6 @@
 import './styles.scss';
-import {App} from "./app";
+import {ProductTable} from "./components/product-table";
+import { MarketingTable } from './components/marketing-table';
 
-new App();
+new ProductTable();
+new MarketingTable();

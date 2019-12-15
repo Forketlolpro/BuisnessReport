@@ -20,10 +20,6 @@ export class DefaultTableView<T> extends BaseView {
         }).join(' ');
     }
 
-    generateImageCell(row) {
-        return `<td><img src="${IMAGE_PREFIX + row['image']}"></td>`;
-    }
-
     generateNameCell(row, key: string) {
         return `<td>${row[key] + ' ' + row['productKey']}</td>`;
     }
@@ -32,10 +28,15 @@ export class DefaultTableView<T> extends BaseView {
     private generateBody(data: T[], rowConfig: RowConfig) {
         return data.map(row => {
             return `<tr>${Object.keys(rowConfig).map(key => {
-                if (key === 'image') {
-                    return this.generateImageCell(row)
+                if (key === 'displayName') {
+                    return this.generateNameCell(row, key);
                 }
-                return (key === 'displayName') ? this.generateNameCell(row, key) : `<td>${row[key]}</td>`;
+
+                if (!(rowConfig[key].renderFunc === undefined)) {
+                    return  `<td>${rowConfig[key].renderFunc(row[key])}</td>`;
+                }
+
+                return `<td>${row[key]}</td>`
             }).join(' ')}</tr>`
         }).join(' ');
     }

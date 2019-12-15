@@ -64,5 +64,9 @@ export class FilterModel<T> {
                 }
             })
         })
+        Object.keys(this.filterModel).forEach(key => {
+            this.filterModel[key].max = Math.ceil(this.filterModel[key].max)
+            this.filterModel[key].min = Math.floor(this.filterModel[key].min)
+        })
     }
 }
