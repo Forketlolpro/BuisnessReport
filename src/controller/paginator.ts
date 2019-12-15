@@ -14,6 +14,10 @@ export class Paginator<T> extends Controller {
         document.querySelector(this.view.selector).addEventListener('click', this.clickEventHandler);
     }
 
+    public getCurrentPageData(): T[] {
+        return this.model.getDataOnCurrentPage()
+    }
+
     public setView(view: DefaultPaginationView): void {
         this.view = view;
     }

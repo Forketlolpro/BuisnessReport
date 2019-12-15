@@ -1,11 +1,12 @@
 import {TableView} from "../interfaces";
+import { BaseView } from "../base-view";
 
 
 const IMAGE_PREFIX = 'https://s3.eu-central-1.amazonaws.com/showcase-demo-images/fashion/images/';
 
-export class DefaultTableView<ReportItem> implements TableView<ReportItem> {
+export class DefaultTableView extends BaseView {
     constructor(selector: string) {
-        this.selector = selector;
+        super(selector)
     }
 
     private generateHeader(headerModel, sortingModel) {
