@@ -1,7 +1,7 @@
 import {Listener} from "../event-manager/interfaces";
 
 export class Controller {
-    private observers: Map<string, Listener>;
+    private readonly observers: Map<string, Listener>;
 
     constructor() {
         this.observers =  new Map<string, Listener>();

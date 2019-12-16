@@ -1,12 +1,12 @@
 import {Controller} from "./controller";
 import {PaginatorModel} from "../models/pagination/pagination-model";
-import {DefaultPaginationView} from "../views/pagination/pagination-view";
+import {PaginationView} from "../views/interfaces";
 
 export class Paginator<T> extends Controller {
-    view: DefaultPaginationView;
+    view: PaginationView;
     model: PaginatorModel<T>;
 
-    constructor(pm: PaginatorModel<T>, pv: DefaultPaginationView) {
+    constructor(pm: PaginatorModel<T>, pv: PaginationView) {
         super();
         this.view = pv;
         this.model = pm;
@@ -18,7 +18,7 @@ export class Paginator<T> extends Controller {
         return this.model.getDataOnCurrentPage()
     }
 
-    public setView(view: DefaultPaginationView): void {
+    public setView(view: PaginationView): void {
         this.view = view;
     }
 

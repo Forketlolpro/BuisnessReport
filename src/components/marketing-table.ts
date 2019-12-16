@@ -3,7 +3,6 @@ import {PaginatorModel} from "../models/pagination/pagination-model";
 import {DefaultPaginationView} from "../views/pagination/pagination-view";
 import {get} from "../helpers/fetch";
 import {Listener} from "../event-manager/interfaces";
-import {MarketingItem } from "../data-models/report-item";
 import { Filter } from "../controller/filter";
 import { FilterModel } from "../models/filter/filter-model";
 import { DefaultFilterView } from "../views/filter/filter-view";
@@ -11,13 +10,14 @@ import { FilterConfigItem, FilterConfig } from '../models/filter/filter-config-i
 import { Table } from "../controller/table";
 import { TableModel } from "../models/table/table-model";
 import { DefaultTableView } from "../views/table/table-view";
-import { HeaderModelItem, RowConfig } from "../models/table/header-model-item";
+import { RowModelItem, RowConfig } from "../models/table/row-model-item";
+import {MarketingItem} from "../data-models/marketing-item";
 
 export class MarketingTable implements Listener {
     paginator: Paginator<MarketingItem>;
     filter: Filter<MarketingItem>;
     table: Table<MarketingItem>;
-    rowConfig: RowConfig;
+    rowConfig: RowConfig<MarketingItem>;
 
     constructor() {
         this.paginator = new Paginator<MarketingItem>(new PaginatorModel(), new DefaultPaginationView('.marketing-table .pagination'));
@@ -39,15 +39,15 @@ export class MarketingTable implements Listener {
         this.filter.initNewData(get('marketing'), filterConfig);
 
         this.rowConfig = {
-            displayName: new HeaderModelItem('Display name', false),
-            path: new HeaderModelItem('Path', false),
-            displays: new HeaderModelItem('Displays', true),
-            clicks: new HeaderModelItem('Clicks', true),
-            orders: new HeaderModelItem('Purchase', true),
-            addToCarts: new HeaderModelItem('Add to cart', true),
-            units: new HeaderModelItem('Sold units', true),
-            revenue: new HeaderModelItem('Revenue', true, (value: string) => `${Math.round(+value)}$`),
-            profit: new HeaderModelItem('Profit', true, (value: string) => `${Math.round(+value)}$`)
+            displayName: new RowModelItem('Display name', false),
+            path: new RowModelItem('Path', false),
+            displays: new RowModelItem('Displays', true),
+            clicks: new RowModelItem('Clicks', true),
+            orders: new RowModelItem('Purchase', true),
+            addToCarts: new RowModelItem('Add to cart', true),
+            units: new RowModelItem('Sold units', true),
+            revenue: new RowModelItem('Revenue', true, (value: string) => `${Math.round(+value)}$`),
+            profit: new RowModelItem('Profit', true, (value: string) => `${Math.round(+value)}$`)
         };
 
         this.table = new Table<MarketingItem>(new TableModel(), new DefaultTableView('.marketing-table .table'));

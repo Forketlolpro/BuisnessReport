@@ -11,13 +11,14 @@ import { FilterConfigItem, FilterConfig } from '../models/filter/filter-config-i
 import { Table } from "../controller/table";
 import { TableModel } from "../models/table/table-model";
 import { DefaultTableView } from "../views/table/table-view";
-import { HeaderModelItem, RowConfig } from "../models/table/header-model-item";
+import { RowModelItem, RowConfig } from "../models/table/row-model-item";
 
 export class ProductTable implements Listener {
     paginator: Paginator<ReportItem>;
     filter: Filter<ReportItem>;
     table: Table<ReportItem>;
-    rowConfig: RowConfig;
+    rowConfig: RowConfig<ReportItem>;
+    IMAGE_PREFIX: string = 'https://s3.eu-central-1.amazonaws.com/showcase-demo-images/fashion/images/';
 
     constructor() {
         this.paginator = new Paginator<ReportItem>(new PaginatorModel(), new DefaultPaginationView('.product-table .pagination'));
@@ -39,15 +40,15 @@ export class ProductTable implements Listener {
         this.filter.initNewData(get('product'), filterConfig);
 
         this.rowConfig = {
-            image: new HeaderModelItem('', false,  (value: string) => `<img src="${'https://s3.eu-central-1.amazonaws.com/showcase-demo-images/fashion/images/' + value}">`),
-            displayName: new HeaderModelItem('Title', false),
-            displays: new HeaderModelItem('Displays', true),
-            orders: new HeaderModelItem('Purchase', true),
-            clicks: new HeaderModelItem('Clicks', true),
-            abandonedUnits: new HeaderModelItem('Abandoned Units', true),
-            soldUnits: new HeaderModelItem('Sold units', true),
-            revenue: new HeaderModelItem('Revenue', true),
-            profit: new HeaderModelItem('Profit', true, (value: string) => value+'$')
+            image: new RowModelItem('', false,  (value: string) => `<img src="${this.IMAGE_PREFIX + value}">`),
+            displayName: new RowModelItem('Title', false, (value: string, rowConfig: RowConfig<ReportItem>, data: ReportItem [])=> `${data['displayName'] + ' ' + data['productKey']}`),
+            displays: new RowModelItem('Displays', true),
+            orders: new RowModelItem('Purchase', true),
+            clicks: new RowModelItem('Clicks', true),
+            abandonedUnits: new RowModelItem('Abandoned Units', true),
+            soldUnits: new RowModelItem('Sold units', true),
+            revenue: new RowModelItem('Revenue', true),
+            profit: new RowModelItem('Profit', true, (value: string) => value+'$')
         };
 
         this.table = new Table<ReportItem>(new TableModel(), new DefaultTableView('.product-table .table'));

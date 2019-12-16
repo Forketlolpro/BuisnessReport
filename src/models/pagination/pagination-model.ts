@@ -1,11 +1,13 @@
 import {PaginationViewParam} from "../../views/pagination/pagination-view-param";
+import {BaseModel} from "../base-model";
 
-export class PaginatorModel<T> {
+export class PaginatorModel<T> extends BaseModel {
     public currentPageData: T[];
     private data: T[];
     private readonly viewParam: PaginationViewParam;
 
     constructor() {
+        super();
         this.viewParam = new PaginationViewParam();
         this.viewParam.itemsOnPage = 10;
     };

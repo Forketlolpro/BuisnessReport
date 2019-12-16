@@ -1,20 +1,22 @@
 import {SortModel} from "./sort-model";
 import {sortFunc} from "../../helpers/sort-func";
-import { RowConfig } from "./header-model-item";
+import { RowConfig } from "./row-model-item";
+import {BaseModel} from "../base-model";
 
 
-export class TableModel<T> {
+export class TableModel<T> extends BaseModel {
     private data: T[];
     private visibleData: T[];
-    private rowConfig: RowConfig;
+    private rowConfig: RowConfig<T>;
     private sortingModel: SortModel;
     private sortedData: T[];
 
     constructor() {
+        super();
         this.sortingModel = new SortModel();
     }
 
-    initNewData(rowConfig?: RowConfig, body?: T[], originalData?: T[]): void {
+    initNewData(rowConfig?: RowConfig<T>, body?: T[], originalData?: T[]): void {
         if (originalData) {
             this.data = originalData;
             this.sortedData = [...originalData];
@@ -26,7 +28,7 @@ export class TableModel<T> {
         }
     }
 
-    public getHeaderModel(): RowConfig {
+    public getHeaderModel(): RowConfig<T> {
         return this.rowConfig;
     }
 

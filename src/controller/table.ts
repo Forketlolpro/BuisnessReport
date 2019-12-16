@@ -1,24 +1,24 @@
 import { Controller } from "./controller"
-import { DefaultTableView } from "../views/table/table-view"
 import { TableModel } from "../models/table/table-model";
-import { RowConfig } from "../models/table/header-model-item";
+import { RowConfig } from "../models/table/row-model-item";
+import {TableView} from "../views/interfaces";
 
 export class Table<T> extends Controller {
-    view: DefaultTableView<T>;
+    view: TableView<T>;
     model: TableModel<T>;
 
-    constructor(model: TableModel<T>, view: DefaultTableView<T>) {
+    constructor(model: TableModel<T>, view: TableView<T>) {
         super();
         this.model = model;
         this.view = view;
         document.querySelector(this.view.selector).addEventListener('click', this.clickEventHandler);
     }
 
-    public setView(view: DefaultTableView<T>): void {
+    public setView(view: TableView<T>): void {
         this.view = view;
     }
 
-    public initNewData(rowConfig?: RowConfig, body?: T[], originalData?: T[]): void {
+    public initNewData(rowConfig?: RowConfig<T>, body?: T[], originalData?: T[]): void {
         this.model.initNewData(rowConfig, body, originalData);
         this.view.render(this.model.getHeaderModel(), this.model.getVisibleData(), this.model.getSortModel());
     }

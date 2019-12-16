@@ -1,7 +1,8 @@
 import {PaginationViewParam} from "./pagination-view-param";
 import {BaseView} from "../base-view";
+import {PaginationView} from "../interfaces";
 
-export class DefaultPaginationView extends BaseView {
+export class DefaultPaginationView extends BaseView implements PaginationView{
     constructor(selector: string) {
         super(selector);
     }

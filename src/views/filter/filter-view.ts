@@ -1,8 +1,9 @@
 import { BaseView } from "../base-view";
 import { FilterConfig, FilterConfigItem } from "../../models/filter/filter-config-item";
+import {FilterView} from "../interfaces";
 
 
-export class DefaultFilterView extends BaseView {
+export class DefaultFilterView extends BaseView implements FilterView{
     constructor(selector: string) {
         super(selector);
     }

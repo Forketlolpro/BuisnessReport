@@ -1,4 +1,5 @@
 import { FilterConfig } from "../filter/filter-config-item";
+import {BaseModel} from "../base-model";
 
 export enum FilterModelProperty {
     min = 'min',
@@ -7,12 +8,13 @@ export enum FilterModelProperty {
     selectMax = 'selectMax',
 }
 
-export class FilterModel<T> {
+export class FilterModel<T> extends BaseModel{
     private filteredData: T[];
     private data: T[];
     private filterModel: FilterConfig;
 
     constructor() {
+        super()
     }
 
     initNewData(data: T[], model: FilterConfig):void {

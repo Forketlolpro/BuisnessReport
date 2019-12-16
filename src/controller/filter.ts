@@ -1,13 +1,13 @@
 import { Controller } from "./controller";
 import { FilterModel, FilterModelProperty } from "../models/filter/filter-model";
-import { DefaultFilterView } from "../views/filter/filter-view";
 import { FilterConfig } from "../models/filter/filter-config-item";
+import {FilterView} from "../views/interfaces";
 
 export class Filter<T> extends Controller {
     model: FilterModel<T>;
-    view: DefaultFilterView;
+    view: FilterView;
 
-    constructor(model: FilterModel<T>, view: DefaultFilterView) {
+    constructor(model: FilterModel<T>, view: FilterView) {
         super();
         this.model = model;
         this.view = view;
