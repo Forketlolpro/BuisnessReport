@@ -41,7 +41,7 @@ export class ProductTable implements Listener {
 
         this.rowConfig = {
             image: new RowModelItem('', false,  (value: string) => `<img src="${this.IMAGE_PREFIX + value}">`),
-            displayName: new RowModelItem('Title', false, (value: string, rowConfig: RowConfig<ReportItem>, data: ReportItem [])=> `${data['displayName'] + ' ' + data['productKey']}`),
+            displayName: new RowModelItem('Title', false, (value: string, rowConfig: RowConfig<ReportItem>, data: ReportItem)=> `${value + ' ' + data.productKey}`),
             displays: new RowModelItem('Displays', true),
             orders: new RowModelItem('Purchase', true),
             clicks: new RowModelItem('Clicks', true),
