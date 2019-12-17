@@ -1,6 +1,5 @@
 import './styles.scss';
-import {ProductTable} from "./components/product-table";
-import { MarketingTable } from './components/marketing-table';
+import {App} from "./App";
 
-new ProductTable();
-new MarketingTable();
+let app = new App();
+app.run();

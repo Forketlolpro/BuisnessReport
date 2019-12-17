@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
+//    "target": "es5",
     "downlevelIteration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "target": "esnext",
+    "removeComments": false
+
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"],
+  "typeRoots": ["node_modules/@types"]
 }
