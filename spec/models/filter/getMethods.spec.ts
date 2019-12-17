@@ -2,7 +2,7 @@ import {FilterModel, FilterModelProperty} from "../../../src/models/filter/filte
 import {FilterConfig, FilterConfigItem} from "../../../src/models/filter/filter-config-item";
 import {TestItem} from "./test-item";
 
-describe('Filter model get methods:', () => {
+describe('Filter model - get methods:', () => {
     let filter: FilterModel<TestItem>;
     let data: TestItem[] = [];
     let testModel: FilterConfig;

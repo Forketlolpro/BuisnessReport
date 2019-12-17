@@ -21,11 +21,9 @@ export class TableModel<T> extends BaseModel {
             this.data = originalData;
             this.sortedData = [...originalData];
             this.sortingModel.prop = '';
-        } 
-        if (rowConfig && body) {
-            this.rowConfig = rowConfig;
-            this.visibleData = body;
         }
+        this.rowConfig = rowConfig;
+        this.visibleData = body;
     }
 
     public getHeaderModel(): RowConfig<T> {

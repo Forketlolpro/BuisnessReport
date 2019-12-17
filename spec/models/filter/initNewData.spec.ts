@@ -2,7 +2,7 @@ import {FilterModel} from "../../../src/models/filter/filter-model";
 import {FilterConfigItem} from "../../../src/models/filter/filter-config-item";
 import {TestItem} from "./test-item";
 
-describe('Filter model initialize test:', () => {
+describe('Filter model - initialize test:', () => {
     let filter: FilterModel<TestItem>;
     let data: TestItem[] = [];
     let testModel = {

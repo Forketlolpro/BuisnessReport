@@ -2,7 +2,7 @@ import {FilterModel} from "../../../src/models/filter/filter-model";
 import {FilterConfig, FilterConfigItem} from "../../../src/models/filter/filter-config-item";
 import {TestItem} from "./test-item";
 
-describe('Filter model calculateRange:', () => {
+describe('Filter model - calculateRange:', () => {
     let filter: FilterModel<TestItem>;
     let data: TestItem[] = [];
     let age: number[] = [];
@@ -11,9 +11,9 @@ describe('Filter model calculateRange:', () => {
 
     beforeEach(() => {
         filter = new FilterModel();
-        data.length = 0;
-        age.length = 0;
-        iq.length = 0;
+        data = [];
+        age = [];
+        iq = [];
         testModel = {
             age: new FilterConfigItem('Age'),
             iq: new FilterConfigItem('iq')
