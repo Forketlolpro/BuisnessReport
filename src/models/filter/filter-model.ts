@@ -65,10 +65,12 @@ export class FilterModel<T> extends BaseModel{
                     this.filterModel[key].min = item[key]
                 }
             })
-        })
-        Object.keys(this.filterModel).forEach(key => {
-            this.filterModel[key].max = Math.ceil(this.filterModel[key].max)
-            this.filterModel[key].min = Math.floor(this.filterModel[key].min)
+         });
+         Object.keys(this.filterModel).forEach(key => {
+            this.filterModel[key].max = Math.ceil(this.filterModel[key].max);
+            this.filterModel[key].min = Math.floor(this.filterModel[key].min);
+            this.filterModel[key].selectMax= this.filterModel[key].max;
+            this.filterModel[key].selectMin = this.filterModel[key].min;
         })
     }
 }
