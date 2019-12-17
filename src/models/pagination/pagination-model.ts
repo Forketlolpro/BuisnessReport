@@ -2,7 +2,7 @@ import {PaginationViewParam} from "../../views/pagination/pagination-view-param"
 import {BaseModel} from "../base-model";
 
 export class PaginatorModel<T> extends BaseModel {
-    public currentPageData: T[];
+    private currentPageData: T[] = [];
     private data: T[];
     private readonly viewParam: PaginationViewParam;
 
@@ -29,6 +29,10 @@ export class PaginatorModel<T> extends BaseModel {
     };
 
     public setItemsOnPage(count: number): void {
+        count = Math.round(count);
+        if (count <= 0) {
+            count = 10;
+        }
         this.viewParam.itemsOnPage = count;
         this.viewParam.pagesTotal = Math.ceil(this.data.length / this.viewParam.itemsOnPage);
         this.viewParam.currentPage = 1;
@@ -36,6 +40,14 @@ export class PaginatorModel<T> extends BaseModel {
     };
 
     public setSelectPage(page: number): void {
+        page = Math.round(page);
+        if (page <= 0) {
+            page = 1;
+        }
+
+        if (page > this.viewParam.pagesTotal) {
+            page = this.viewParam.pagesTotal
+        }
         this.viewParam.currentPage = page;
         this.takeCurrentPageElement();
     };

@@ -4,7 +4,7 @@ module.exports = function(config) {
     config.set({
         basePath: '',
         frameworks: ['jasmine'],
-        files: ['spec/*.spec.ts'],
+        files: ['spec/**/*.spec.ts'],
         exclude: [],
         preprocessors: {
             'spec/**/*.ts': ['webpack']
