@@ -33,7 +33,7 @@ export class Filter<T> extends Controller {
         }
         this.model.filter();
         this.notify('filterChange', this.model.getFilteredData());
-    }
+    };
 
     private clickEventHandler = (e: Event):void => {
         e.stopPropagation();
@@ -42,7 +42,7 @@ export class Filter<T> extends Controller {
             this.model.resetFilter(elem.dataset['property']);
             this.view.render(this.model.getFilterModel());
         }
-    }
+    };
 
     private keypressEventHandler = (e: KeyboardEvent): void => {
         if (e.code === 'Enter') {
