@@ -27,6 +27,7 @@ export class ReportTable<T> implements Listener {
         this.table.attach('tableChange', this);
         this.table.initNewData(collumConfig, this.paginator.getCurrentPageData(), data);
     }
+
     update(event: string, data: any): void {
         if (event === 'tableChange')
             this.tableHandler(data);
@@ -47,6 +48,6 @@ export class ReportTable<T> implements Listener {
 
     filterHandler = (data: T[]): void => {
         this.paginator.initNewData(data);
-        this.table.initNewData(this.collumConfig,  this.paginator.getCurrentPageData(), data);
+        this.table.initNewData(this.collumConfig, this.paginator.getCurrentPageData(), data);
     };
 }

@@ -1,4 +1,4 @@
 export interface Listener {
-    update<T>(event: string, data: T): void;
+    update(event: string, data: any): void;
 }
 

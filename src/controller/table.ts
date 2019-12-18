@@ -28,7 +28,7 @@ export class Table<T> extends Controller {
         let elem = e.target as HTMLElement;
         if (elem.closest('thead') && elem.dataset["property"]) {
             this.model.setSortingModel(elem.dataset["property"]);
-            this.notify('tableChange',this.model.getSorterData());
+            this.notify('tableChange', this.model.getSorterData());
         }
     };
 }

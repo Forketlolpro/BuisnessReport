@@ -1,4 +1,4 @@
-import { FilterConfig } from "../filter/filter-config-item";
+import { FilterConfig } from "./filter-config-item";
 import {BaseModel} from "../base-model";
 
 export enum FilterModelProperty {
