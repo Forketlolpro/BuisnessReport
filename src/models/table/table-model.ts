@@ -43,6 +43,9 @@ export class TableModel<T> extends BaseModel {
     }
 
     public setSortingModel(key: string): void {
+        if (this.rowConfig[key]=== undefined) {
+            throw new Error('Incorrect sort key')
+        }
         if (key !== this.sortingModel.prop) {
             this.sortingModel.prop = key;
             this.sortingModel.direction = 'desc';
@@ -53,7 +56,7 @@ export class TableModel<T> extends BaseModel {
         this.sort()
     }
 
-    switchSortDirection(): void {
+    private switchSortDirection(): void {
         if (!this.sortingModel.direction) {
             this.sortingModel.direction = 'desc';
         } else if (this.sortingModel.direction === 'desc') {
