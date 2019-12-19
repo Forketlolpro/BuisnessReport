@@ -1,9 +1,9 @@
-import { Controller } from "./controller";
 import { FilterModel, FilterModelProperty } from "../models/filter/filter-model";
 import { FilterConfig } from "../models/filter/filter-config-item";
 import {FilterView} from "../views/interfaces";
+import {EventManager} from "../event-manager/event-manager";
 
-export class Filter<T> extends Controller {
+export class Filter<T> extends EventManager {
     model: FilterModel<T>;
     view: FilterView;
 

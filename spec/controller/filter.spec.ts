@@ -4,16 +4,13 @@ import {FilterModel} from "../../src/models/filter/filter-model";
 import {FilterView} from "../../src/views/interfaces";
 import {DefaultFilterView} from "../../src/views/filter/filter-view";
 import {FilterConfig, FilterConfigItem} from "../../src/models/filter/filter-config-item";
-import {Listener} from "../../src/event-manager/interfaces";
 
 describe('Filter controller', () => {
-    class TestListenerSubmit implements Listener {
-        update(event: string, dataFromFilter: TestItem[]): void {
-            if (data.length === dataFromFilter.length) {
-                eventWork = true;
-            }
+    let submitCallback = (event: string, dataFromFilter: TestItem[]): void => {
+        if (data.length === dataFromFilter.length) {
+            eventWork = true;
         }
-    }
+    };
 
     let filter: Filter<TestItem>;
     let model: FilterModel<TestItem>;
@@ -21,13 +18,11 @@ describe('Filter controller', () => {
     let data: TestItem[] = [];
     let eventWork: boolean = false;
     let filterConfig: FilterConfig;
-    let listenet: Listener;
 
     beforeEach(() => {
         view = new DefaultFilterView('body');
         model = new FilterModel<TestItem>();
         filter = new Filter(model, view);
-        listenet = new TestListenerSubmit();
         data = [];
         for (let i = 0; i < 1000; i++) {
             data.push(new TestItem())
@@ -41,7 +36,7 @@ describe('Filter controller', () => {
     });
 
     it('Test 1: Filter controller - submit event', () => {
-        filter.attach('filterChange', listenet);
+        filter.attach('filterChange', submitCallback);
         filter.initNewData(data, filterConfig);
         let sumbitButton = document.querySelector('form button[type=submit]') as HTMLButtonElement;
         sumbitButton.click();

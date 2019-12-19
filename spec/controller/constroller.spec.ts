@@ -1,19 +1,14 @@
-import {Controller} from "../../src/controller/controller";
-import {Listener} from "../../src/event-manager/interfaces";
+import {EventManager} from "../../src/event-manager/event-manager";
 
 let updateWork: boolean = false;
-
-class testListener implements Listener {
-    update(event: string, data: boolean): void {
-        updateWork = data;
-    }
-}
+let callback = (event: string, data: boolean): void => {
+    updateWork = data;
+};
 
 describe('Controller - controller:', () => {
     it('Test 1: Controller', () => {
-        let constroller = new Controller();
-        let listener = new testListener();
-        constroller.attach('test', listener);
+        let constroller = new EventManager();
+        constroller.attach('test', callback);
         constroller['notify']('test', true);
         expect(updateWork).toBeTrue();
     });

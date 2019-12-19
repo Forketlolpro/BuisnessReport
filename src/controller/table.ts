@@ -1,9 +1,9 @@
-import { Controller } from "./controller"
 import { TableModel } from "../models/table/table-model";
 import { RowConfig } from "../models/table/row-model-item";
 import {TableView} from "../views/interfaces";
+import {EventManager} from "../event-manager/event-manager";
 
-export class Table<T> extends Controller {
+export class Table<T> extends EventManager {
     view: TableView<T>;
     model: TableModel<T>;
 

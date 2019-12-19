@@ -1,8 +1,8 @@
-import {Controller} from "./controller";
 import {PaginatorModel} from "../models/pagination/pagination-model";
 import {PaginationView} from "../views/interfaces";
+import {EventManager} from "../event-manager/event-manager";
 
-export class Paginator<T> extends Controller {
+export class Paginator<T> extends EventManager {
     view: PaginationView;
     model: PaginatorModel<T>;
 
