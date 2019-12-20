@@ -3,19 +3,16 @@ import { FilterConfig } from "../models/filter/filter-config-item";
 import {FilterView} from "../views/interfaces";
 import {EventManager} from "../event-manager/event-manager";
 
-export class Filter<T> extends EventManager {
+export class Filter<T> {
     model: FilterModel<T>;
     view: FilterView;
+    private eventManager: EventManager;
 
-    constructor(model: FilterModel<T>, view: FilterView) {
-        super();
+    constructor(model: FilterModel<T>, view: FilterView, eventManager: EventManager) {
+        this.eventManager = eventManager;
         this.model = model;
         this.view = view;
-
-        document.querySelector(this.view.selector).addEventListener('submit', this.submitEventHandler);
-        document.querySelector(this.view.selector).addEventListener('click', this.clickEventHandler);
-        document.querySelector(this.view.selector).addEventListener('keydown', this.keypressEventHandler);
-        document.querySelector(this.view.selector).addEventListener('focusout', this.focusoutEventHandler);
+        this.subscribeToViewEvents();
     }
 
     public initNewData (data: T[], filterModel: FilterConfig): void {
@@ -23,23 +20,36 @@ export class Filter<T> extends EventManager {
         this.view.render(this.model.getFilterModel());
     }
 
+    get filterElement(): HTMLElement {
+        return document.querySelector(this.view.selector);
+    }
+
+    get filterFieldElements(): NodeListOf<HTMLInputElement> {
+        return this.filterElement.querySelectorAll(this.view.getInputSelector());
+    }
+
+    subscribeToViewEvents(): void {
+        this.filterElement.addEventListener('submit', this.submitEventHandler);
+        this.filterElement.addEventListener('click', this.clickEventHandler);
+        this.filterElement.addEventListener('keydown', this.keypressEventHandler);
+        this.filterElement.addEventListener('focusout', this.focusoutEventHandler);
+    }
+
     private submitEventHandler = (e: Event):void => {
         e.preventDefault();
         e.stopPropagation();
-        let elem = e.target as HTMLFormElement;
-        for (let i = 0; i < elem.length - 1; i++) {
-            let input = elem[i] as HTMLInputElement; 
-            this.model.setFilterModelProperty(input.dataset['property'], input.dataset['use'] as FilterModelProperty ,+input.value);
-        }
+        this.filterFieldElements.forEach(input => {
+            this.model.setFilterModelProperty(input.getAttribute('property'), input.getAttribute('use') as FilterModelProperty ,+input.value);
+        });
         this.model.filter();
-        this.notify('filterChange', this.model.getFilteredData());
+        this.eventManager.notify('filterChange', this.model.getFilteredData());
     };
 
     private clickEventHandler = (e: Event):void => {
         e.stopPropagation();
         let elem = e.target as HTMLElement;
         if (elem.className === 'resetFilter') {
-            this.model.resetFilter(elem.dataset['property']);
+            this.model.resetFilter(elem.getAttribute('property'));
             this.view.render(this.model.getFilterModel());
         }
     };
@@ -52,17 +62,18 @@ export class Filter<T> extends EventManager {
 
     private focusoutEventHandler = (e: Event): boolean => {
         let elem = e.target as HTMLInputElement;
+
         if (elem.tagName === 'BUTTON') {
             return true;
         }
-        if (+elem.value <= this.model.getFilterModelValue(elem.dataset['property'], FilterModelProperty.min)) {
-            elem.value = this.model.getFilterModelValue(elem.dataset['property'], FilterModelProperty.min).toString();
+        if (+elem.value <= this.model.getFilterModelValue(elem.getAttribute('property'), FilterModelProperty.min)) {
+            elem.value = this.model.getFilterModelValue(elem.getAttribute('property'), FilterModelProperty.min).toString();
         }
-        if (+elem.value >= this.model.getFilterModelValue(elem.dataset['property'], FilterModelProperty.max)) {
-            elem.value = this.model.getFilterModelValue(elem.dataset['property'], FilterModelProperty.max).toString();
+        if (+elem.value >= this.model.getFilterModelValue(elem.getAttribute('property'), FilterModelProperty.max)) {
+            elem.value = this.model.getFilterModelValue(elem.getAttribute('property'), FilterModelProperty.max).toString();
         }
 
-        this.model.setFilterModelProperty(elem.dataset['property'], elem.dataset['use'] as FilterModelProperty, +elem.value);
+        this.model.setFilterModelProperty(elem.getAttribute('property'), elem.getAttribute('use') as FilterModelProperty, +elem.value);
         this.view.render(this.model.getFilterModel());
     };
 }

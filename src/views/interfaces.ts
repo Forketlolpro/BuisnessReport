@@ -14,6 +14,7 @@ export interface TableView<T> extends BaseView {
 }
 
 export interface FilterView extends BaseView {
+    getInputSelector(): string;
     render(config: FilterConfig): void;
 }
 

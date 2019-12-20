@@ -3,15 +3,24 @@ import { RowConfig } from "../models/table/row-model-item";
 import {TableView} from "../views/interfaces";
 import {EventManager} from "../event-manager/event-manager";
 
-export class Table<T> extends EventManager {
+export class Table<T> {
     view: TableView<T>;
     model: TableModel<T>;
+    private eventManager: EventManager;
 
-    constructor(model: TableModel<T>, view: TableView<T>) {
-        super();
+    constructor(model: TableModel<T>, view: TableView<T>, eventManager: EventManager) {
+        this.eventManager = eventManager;
         this.model = model;
         this.view = view;
-        document.querySelector(this.view.selector).addEventListener('click', this.clickEventHandler);
+        this.subscribeToViewEvents();
+    }
+
+    get tableElement(): HTMLElement {
+        return document.querySelector(this.view.selector);
+    }
+
+    subscribeToViewEvents(): void {
+        this.tableElement.addEventListener('click', this.clickEventHandler);
     }
 
     public setView(view: TableView<T>): void {
@@ -26,9 +35,9 @@ export class Table<T> extends EventManager {
     private clickEventHandler = (e:MouseEvent): void => {
         e.stopPropagation();
         let elem = e.target as HTMLElement;
-        if (elem.closest('thead') && elem.dataset["property"]) {
-            this.model.setSortingModel(elem.dataset["property"]);
-            this.notify('tableChange', this.model.getSorterData());
+        if (elem.closest('thead') && elem.getAttribute("property")) {
+            this.model.setSortingModel(elem.getAttribute("property"));
+            this.eventManager.notify('tableChange', this.model.getSorterData());
         }
     };
 }

@@ -8,9 +8,13 @@ export class DefaultFilterView extends BaseView implements FilterView{
         super(selector);
     }
 
+    getInputSelector(): string {
+        return 'input.filter-input'
+    }
+
     generateResetButton(item: [string, FilterConfigItem]):string {
         if (item[1].selectMin > item[1].min || item[1].selectMax < item[1].max) {
-            return `<button data-property="${item[0]}" type="reset" class="resetFilter">&#10005;</button>`
+            return `<button property="${item[0]}" type="reset" class="resetFilter">&#10005;</button>`
         }
 
         return ``;
@@ -21,8 +25,8 @@ export class DefaultFilterView extends BaseView implements FilterView{
         let inputMaxValue = (item[1].selectMax && item[1].selectMax <= item[1].max) ? item[1].selectMax : item[1].max;
         return `<div>
                     <label>${item[1].title}: </label>
-                    <input class="form-control" data-use="selectMin" data-property="${item[0]}" value="${inputMinValue}" type="number">
-                    <input class="form-control" data-use="selectMax" data-property="${item[0]}" value="${inputMaxValue}" type="number">
+                    <input class="filter-input form-control" use="selectMin" property="${item[0]}" value="${inputMinValue}" type="number">
+                    <input class="filter-input form-control" use="selectMax" property="${item[0]}" value="${inputMaxValue}" type="number">
                     ${this.generateResetButton(item)}
                 </div>`
     }

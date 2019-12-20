@@ -14,7 +14,7 @@ export class DefaultTableView<T> extends BaseView implements TableView<T>{
             if (sortingModel.prop === key) {
                 htmlClass = sortingModel.direction ? sortingModel.direction : '';
             }
-            return (rowConfig[key].sortable) ? `<th class='${htmlClass}' data-property='${key}'> ${rowConfig[key].title} </th>` : `<th> ${rowConfig[key].title} </th>`;
+            return (rowConfig[key].sortable) ? `<th class='${htmlClass}' property='${key}'> ${rowConfig[key].title} </th>` : `<th> ${rowConfig[key].title} </th>`;
         }).join(' ');
     }
 

@@ -1,7 +1,7 @@
 import {EventManager} from "../../src/event-manager/event-manager";
 
 let updateWork: boolean = false;
-let callback = (event: string, data: boolean): void => {
+let callback = (data: boolean): void => {
     updateWork = data;
 };
 

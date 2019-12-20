@@ -2,16 +2,25 @@ import {PaginatorModel} from "../models/pagination/pagination-model";
 import {PaginationView} from "../views/interfaces";
 import {EventManager} from "../event-manager/event-manager";
 
-export class Paginator<T> extends EventManager {
+export class Paginator<T> {
     view: PaginationView;
     model: PaginatorModel<T>;
+    private eventManager: EventManager;
 
-    constructor(pm: PaginatorModel<T>, pv: PaginationView) {
-        super();
+    constructor(pm: PaginatorModel<T>, pv: PaginationView, eventManager: EventManager) {
+        this.eventManager = eventManager;
         this.view = pv;
         this.model = pm;
-        document.querySelector(this.view.selector).addEventListener('change', this.changeEventHandler);
-        document.querySelector(this.view.selector).addEventListener('click', this.clickEventHandler);
+        this.subscribeToViewEvents();
+    }
+
+    get paginatorElement(): HTMLElement {
+        return document.querySelector(this.view.selector);
+    }
+
+    subscribeToViewEvents(): void {
+        this.paginatorElement.addEventListener('change', this.changeEventHandler);
+        this.paginatorElement.addEventListener('click', this.clickEventHandler);
     }
 
     public getCurrentPageData(): T[] {
@@ -35,13 +44,13 @@ export class Paginator<T> extends EventManager {
         }
         this.model.setSelectPage(+elem.innerHTML);
         this.view.render(this.model.getViewParam());
-        this.notify('pagiChange', this.model.getDataOnCurrentPage());
+        this.eventManager.notify('pagiChange', this.model.getDataOnCurrentPage());
     };
 
     private changeEventHandler = (e: Event) => {
         let elem = e.target as HTMLSelectElement;
         this.model.setItemsOnPage(+elem.value);
         this.view.render(this.model.getViewParam());
-        this.notify('pagiChange', this.model.getDataOnCurrentPage());
+        this.eventManager.notify('pagiChange', this.model.getDataOnCurrentPage());
     };
 }
