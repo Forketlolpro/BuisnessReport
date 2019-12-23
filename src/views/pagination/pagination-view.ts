@@ -7,9 +7,8 @@ export class DefaultPaginationView extends BaseView implements PaginationView{
         super(selector);
     }
 
-
     public render(paginationParams: PaginationViewParam): void {
-        document.querySelector(this.selector).innerHTML = this.generateTemplate(+paginationParams.currentPage, +paginationParams.pagesTotal, paginationParams.itemsOnPage, paginationParams.itemCount);
+        document.querySelector(this.selector).innerHTML = this.generateTemplate(paginationParams);
     }
 
     generatePagesArrangementRef(currentPage: number, pageCount: number): string {
@@ -31,20 +30,20 @@ export class DefaultPaginationView extends BaseView implements PaginationView{
         return range.join('')
     }
 
-    private generateTemplate(current: number, last: number, itemsOnPage: number, totalElements: number):string {
+    private generateTemplate(paginationParams: PaginationViewParam):string {
         return `
 
-                <div class="number">${this.generatePagesArrangementRef(current, last).toString()}</div>
+                <div class="number">${this.generatePagesArrangementRef(paginationParams.currentPage, paginationParams.pagesTotal).toString()}</div>
                 <form>
                 <select>
-                    ${[10, 20, 30].map((i) => {
-            if (itemsOnPage === i) {
+                    ${paginationParams.pagesSelectValues.map((i) => {
+            if (paginationParams.itemsOnPage === i) {
                 return `<option selected value="${i}">${i}</option>`
             }
             return `<option value="${i}">${i}</option>`
         })}
                 </select>
-                <span class="total">Total: ${totalElements}</span>
+                <span class="total">Total: ${paginationParams.pagesTotal}</span>
                 </form>`
     }
 }

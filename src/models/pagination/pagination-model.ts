@@ -6,10 +6,11 @@ export class PaginatorModel<T> extends BaseModel {
     private data: T[];
     private readonly viewParam: PaginationViewParam;
 
-    constructor() {
+    constructor(selectValues: number[]) {
         super();
         this.viewParam = new PaginationViewParam();
-        this.viewParam.itemsOnPage = 10;
+        this.viewParam.pagesSelectValues = selectValues;
+        this.viewParam.itemsOnPage = selectValues[0];
     };
 
     public getDataOnCurrentPage(): T[] {
@@ -20,23 +21,28 @@ export class PaginatorModel<T> extends BaseModel {
         return this.viewParam;
     };
 
+    public setSelectValues(selectValues: number[]) {
+        this.viewParam.pagesSelectValues = selectValues;
+        this.viewParam.itemsOnPage = selectValues[0];
+    }
+
     public initNewData(data: T[]): void {
         this.data = data;
         this.viewParam.pagesTotal = Math.ceil(this.data.length / this.viewParam.itemsOnPage);
         this.viewParam.currentPage = 1;
         this.viewParam.itemCount = data.length;
-        this.takeCurrentPageElement();
+        this.getElementsForCurrentPage();
     };
 
     public setItemsOnPage(count: number): void {
         count = Math.round(count);
         if (count <= 0) {
-            count = 10;
+            count = this.viewParam.pagesSelectValues[0];
         }
         this.viewParam.itemsOnPage = count;
         this.viewParam.pagesTotal = Math.ceil(this.data.length / this.viewParam.itemsOnPage);
         this.viewParam.currentPage = 1;
-        this.takeCurrentPageElement();
+        this.getElementsForCurrentPage();
     };
 
     public setSelectPage(page: number): void {
@@ -49,10 +55,10 @@ export class PaginatorModel<T> extends BaseModel {
             page = this.viewParam.pagesTotal
         }
         this.viewParam.currentPage = page;
-        this.takeCurrentPageElement();
+        this.getElementsForCurrentPage();
     };
 
-    private takeCurrentPageElement(): void {
+    private getElementsForCurrentPage(): void {
         this.currentPageData = this.data.slice((this.viewParam.currentPage - 1) * this.viewParam.itemsOnPage, (this.viewParam.currentPage) * this.viewParam.itemsOnPage);
     };
 }

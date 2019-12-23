@@ -3,7 +3,7 @@ import {PaginatorModel} from "../../../src/models/pagination/pagination-model";
 describe('Pagination setItemsOnPage test:', () => {
     let pagination: PaginatorModel<number>;
     beforeEach(() => {
-        pagination = new PaginatorModel();
+        pagination = new PaginatorModel([10,20,30]);
     });
     it('Test 1: Set 20', () => {
         pagination.initNewData([1, 2, 3, 4, 5]);

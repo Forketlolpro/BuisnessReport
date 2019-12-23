@@ -26,7 +26,7 @@ export let productFilterConfig: FilterConfig = {
     profit: new FilterConfigItem('Profit')
 };
 
-export let productCollumConfig: RowConfig<ReportItem> = {
+export let productColumnConfig: RowConfig<ReportItem> = {
     image: new RowModelItem('', false,  (value: string) => `<img src="${IMAGE_PREFIX + value}">`),
     displayName: new RowModelItem('Title', false, (value: string, rowConfig: RowConfig<ReportItem>, data: ReportItem)=> `${value + ' ' + data.productKey}`),
     displays: new RowModelItem('Displays', true),

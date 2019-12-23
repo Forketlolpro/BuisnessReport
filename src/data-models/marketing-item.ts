@@ -23,7 +23,7 @@ export let marketingFilterConfig: FilterConfig = {
     profit: new FilterConfigItem('Profit')
 };
 
-export let marketingCollumConfig: RowConfig<MarketingItem> = {
+export let marketingColumnConfig: RowConfig<MarketingItem> = {
     displayName: new RowModelItem('Display name', false),
     path: new RowModelItem('Path', false),
     displays: new RowModelItem('Displays', true),

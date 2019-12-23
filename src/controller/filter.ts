@@ -62,18 +62,11 @@ export class Filter<T> {
 
     private focusoutEventHandler = (e: Event): boolean => {
         let elem = e.target as HTMLInputElement;
-
         if (elem.tagName === 'BUTTON') {
             return true;
         }
-        if (+elem.value <= this.model.getFilterModelValue(elem.getAttribute('property'), FilterModelProperty.min)) {
-            elem.value = this.model.getFilterModelValue(elem.getAttribute('property'), FilterModelProperty.min).toString();
-        }
-        if (+elem.value >= this.model.getFilterModelValue(elem.getAttribute('property'), FilterModelProperty.max)) {
-            elem.value = this.model.getFilterModelValue(elem.getAttribute('property'), FilterModelProperty.max).toString();
-        }
-
         this.model.setFilterModelProperty(elem.getAttribute('property'), elem.getAttribute('use') as FilterModelProperty, +elem.value);
+        elem.value = this.model.getFilterModelValue(elem.getAttribute('property'), elem.getAttribute('use') as FilterModelProperty).toString();
         this.view.render(this.model.getFilterModel());
     };
 }

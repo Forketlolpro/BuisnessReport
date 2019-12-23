@@ -31,6 +31,10 @@ export class Paginator<T> {
         this.view = view;
     }
 
+    public setSelectValues(selectValues: number[]) {
+        this.model.setSelectValues(selectValues)
+    }
+
     public initNewData(data: T[]): void {
         this.model.initNewData(data);
         this.view.render(this.model.getViewParam())
@@ -44,13 +48,13 @@ export class Paginator<T> {
         }
         this.model.setSelectPage(+elem.innerHTML);
         this.view.render(this.model.getViewParam());
-        this.eventManager.notify('pagiChange', this.model.getDataOnCurrentPage());
+        this.eventManager.notify('paginationChange', this.model.getDataOnCurrentPage());
     };
 
     private changeEventHandler = (e: Event) => {
         let elem = e.target as HTMLSelectElement;
         this.model.setItemsOnPage(+elem.value);
         this.view.render(this.model.getViewParam());
-        this.eventManager.notify('pagiChange', this.model.getDataOnCurrentPage());
+        this.eventManager.notify('paginationChange', this.model.getDataOnCurrentPage());
     };
 }

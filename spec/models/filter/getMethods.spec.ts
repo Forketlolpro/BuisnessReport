@@ -39,7 +39,7 @@ describe('Filter model - get methods:', () => {
         filter.initNewData(data, testModel);
         filter.setFilterModelProperty('iq' , FilterModelProperty.selectMax, 0);
         filter.filter();
-        expect(filter.getFilteredData().length).toEqual(0)
+        expect(filter.getFilteredData().length).toEqual(3)
     });
 
     it('Test 4: getFilterModelValue get max value by prop', () => {

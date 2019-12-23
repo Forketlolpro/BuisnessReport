@@ -15,10 +15,10 @@ export class ReportTable<T> {
     table: Table<T>;
     eventManager: EventManager;
 
-    constructor(data: T[], tableView: TableView<T>, pagiView: PaginationView, filterView: FilterView, filterConfig: FilterConfig, private collumConfig: RowConfig<T>) {
+    constructor(data: T[], tableView: TableView<T>, pagiView: PaginationView, filterView: FilterView, filterConfig: FilterConfig, private columnConfig: RowConfig<T>) {
         this.eventManager = new EventManager();
-        this.paginator = new Paginator<T>(new PaginatorModel(), pagiView, this.eventManager);
-        this.eventManager.attach('pagiChange', this.paginationHandler);
+        this.paginator = new Paginator<T>(new PaginatorModel([10,20,30]), pagiView, this.eventManager);
+        this.eventManager.attach('paginationChange', this.paginationHandler);
         this.paginator.initNewData(data);
 
         this.filter = new Filter<T>(new FilterModel(), filterView,  this.eventManager);
@@ -27,20 +27,20 @@ export class ReportTable<T> {
 
         this.table = new Table<T>(new TableModel(), tableView,  this.eventManager);
         this.eventManager.attach('tableChange', this.tableHandler);
-        this.table.initNewData(collumConfig, this.paginator.getCurrentPageData(), data);
+        this.table.initNewData(columnConfig, this.paginator.getCurrentPageData(), data);
     }
 
     paginationHandler = (currentPageData: T[]): void => {
-        this.table.initNewData(this.collumConfig, currentPageData)
+        this.table.initNewData(this.columnConfig, currentPageData)
     };
 
     tableHandler = (data: T[]): void => {
         this.paginator.initNewData(data);
-        this.table.initNewData(this.collumConfig, this.paginator.getCurrentPageData());
+        this.table.initNewData(this.columnConfig, this.paginator.getCurrentPageData());
     };
 
     filterHandler = (data: T[]): void => {
         this.paginator.initNewData(data);
-        this.table.initNewData(this.collumConfig, this.paginator.getCurrentPageData(), data);
+        this.table.initNewData(this.columnConfig, this.paginator.getCurrentPageData(), data);
     };
 }

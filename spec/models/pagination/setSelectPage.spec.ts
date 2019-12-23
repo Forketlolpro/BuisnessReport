@@ -5,7 +5,7 @@ describe('Pagination setSelectPage:', () => {
     let array: number[] = [];
 
     beforeEach(() => {
-        pagination = new PaginatorModel();
+        pagination = new PaginatorModel([10,20,30]);
         for (let i: number = 0; i < 20; i++) {
             array[i] = i;
         }

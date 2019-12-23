@@ -31,7 +31,7 @@ describe('Pagination controller', () => {
     beforeEach(() => {
         eventManager = new EventManager();
         view = new DefaultPaginationView('body');
-        model = new PaginatorModel<TestItem>();
+        model = new PaginatorModel<TestItem>([10,20,30]);
         pagination = new Paginator(model, view, eventManager);
         data = [];
         for (let i = 0; i < 1000; i++) {
@@ -41,7 +41,7 @@ describe('Pagination controller', () => {
     });
 
     it('Test 1: Pagination controller - click event test', () => {
-        eventManager.attach('pagiChange', clickCallback);
+        eventManager.attach('paginationChange', clickCallback);
         pagination.initNewData(data);
         let elem = document.querySelectorAll('.number a')[3] as HTMLElement;
         elem.click();
@@ -50,7 +50,7 @@ describe('Pagination controller', () => {
 
     it('Test 2: Pagination controller - select event test', () => {
         pagination.initNewData(data);
-        eventManager.attach('pagiChange', changeCallback);
+        eventManager.attach('paginationChange', changeCallback);
         let select = document.querySelector('body select') as HTMLSelectElement;
         select.value = '30';
         select.dispatchEvent(new Event('change', {bubbles: true}));
