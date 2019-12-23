@@ -21,9 +21,9 @@ export class FilterConfigItem {
     set selectMax(value: number) {
         if(value > this.max || value < this.min) {
             this._selectMax = this.max;
-            return;
+        } else {
+            this._selectMax = value;
         }
-        this._selectMax = value;
     }
 
     get selectMin(): number {
@@ -33,8 +33,8 @@ export class FilterConfigItem {
     set selectMin(value: number) {
         if(value < this.min || value > this.max) {
             this._selectMin = this.min;
-            return;
+        } else {
+            this._selectMin = value;
         }
-        this._selectMin = value;
     }
 }
