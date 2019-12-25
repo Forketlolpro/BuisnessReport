@@ -6,7 +6,7 @@ import {DefaultFilterView} from "../../src/views/filter/filter-view";
 import {FilterConfig, FilterConfigItem} from "../../src/models/filter/filter-config-item";
 import {EventManager} from "../../src/event-manager/event-manager";
 
-describe('Filter controller', () => {
+describe('Filter', () => {
     let submitCallback = (dataFromFilter: TestItem[]): void => {
         if (data.length === dataFromFilter.length) {
             eventWork = true;
@@ -35,31 +35,28 @@ describe('Filter controller', () => {
             age: new FilterConfigItem('Age'),
             iq: new FilterConfigItem('Iq')
         }
-
     });
 
-    it('Test 1: Filter controller - submit event', () => {
-        eventManager.attach('filterChange', submitCallback);
-        filter.initNewData(data, filterConfig);
-        let sumbitButton = document.querySelector('form button[type=submit]') as HTMLButtonElement;
-        sumbitButton.click();
-        expect(eventWork).toBeTrue();
+    describe('submitEventHandler:', () => {
+        it('Should correctly send the event about filter form submit', () => {
+            eventManager.attach('filterChange', submitCallback);
+            filter.initNewData(data, filterConfig);
+            let sumbitButton = document.querySelector('form button[type=submit]') as HTMLButtonElement;
+            sumbitButton.click();
+            expect(eventWork).toBeTrue();
+        });
     });
 
-    it('Test 2: Filter controller - click event', () => {
-        filter.initNewData(data, filterConfig);
-        let input = document.querySelector('form input[use=selectMin]') as HTMLInputElement;
-        input.value = '100';
-    });
-
-    it('Test 3: Filter controller - focusout and click event', () => {
-        filter.initNewData(data, filterConfig);
-        let input: HTMLInputElement = document.querySelector('form input[use=selectMin]');
-        input.value = '100';
-        input.dispatchEvent(new Event('focusout', {bubbles: true}));
-        let resetButton: HTMLButtonElement = document.querySelector('button[property=age]');
-        expect(resetButton).not.toBeNull();
-        resetButton.click();
-        expect(document.querySelector('button[property=age]')).toBeNull();
+    describe('clickEventHandler, focusOutEventHandler: ', () => {
+        it('Should correctly auto correct event work and filter reset button', () => {
+            filter.initNewData(data, filterConfig);
+            let input: HTMLInputElement = document.querySelector('form input[use=selectMin]');
+            input.value = '100';
+            input.dispatchEvent(new Event('focusout', {bubbles: true}));
+            let resetButton: HTMLButtonElement = document.querySelector('button[property=age]');
+            expect(resetButton).not.toBeNull();
+            resetButton.click();
+            expect(document.querySelector('button[property=age]')).toBeNull();
+        });
     });
 });

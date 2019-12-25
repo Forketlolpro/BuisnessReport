@@ -3,7 +3,7 @@ import {TestItem} from "../filter/test-item";
 import {RowConfig, RowModelItem} from "../../../src/models/table/row-model-item";
 import {SortModel} from "../../../src/models/table/sort-model";
 
-describe('Table model', () => {
+describe('TableModel', () => {
     describe('initNewData:', () => {
         let table: TableModel<TestItem>;
         let initData: any;

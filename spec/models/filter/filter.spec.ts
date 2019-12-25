@@ -1,7 +1,7 @@
 import {FilterModel, FilterModelProperty} from "../../../src/models/filter/filter-model";
 import {FilterConfigItem} from "../../../src/models/filter/filter-config-item";
 
-describe('Filter model', () => {
+describe('FilterModel', () => {
     describe('filter:', () => {
         let filter: FilterModel<any[]>;
         let dataSample: any [];

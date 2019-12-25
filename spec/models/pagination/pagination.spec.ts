@@ -1,6 +1,6 @@
 import {PaginatorModel} from "../../../src/models/pagination/pagination-model";
 
-describe('Pagination model', () => {
+describe('PaginationModel', () => {
     describe('getDataOnCurrentPage:', () => {
         let pagination: PaginatorModel<number>;
 

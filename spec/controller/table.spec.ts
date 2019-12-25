@@ -12,7 +12,7 @@ let callback = (data: TestItem[]): void => {
     }
 };
 
-describe('Table controller', () => {
+describe('Table', () => {
     let tableModel: TableModel<TestItem>;
     let tableView: DefaultTableView<TestItem>;
     let table: Table<TestItem>;
@@ -36,10 +36,12 @@ describe('Table controller', () => {
         }
     });
 
-    it('Test 1: Table controller - base test', () => {
-        table.initNewData(rowModel, data, data);
-        let elem = document.querySelector('[property=age]') as HTMLElement;
-        elem.click();
-        expect(clickEventWork).toBeTrue();
+    describe('clickEventHandler:', () => {
+        it('Should click on sorting button notify outer listener', () => {
+            table.initNewData(rowModel, data, data);
+            let elem = document.querySelector('[property=age]') as HTMLElement;
+            elem.click();
+            expect(clickEventWork).toBeTrue();
+        });
     });
 });
