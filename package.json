@@ -6,11 +6,13 @@
   "scripts": {
     "start": "webpack-dev-server --open",
     "build": "webpack",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "test": "karma start"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/jasmine": "^3.5.0",
     "@types/node": "^12.12.14",
     "@types/webpack": "^4.41.0",
     "@types/webpack-dev-server": "^3.9.0",
@@ -20,6 +22,12 @@
     "file-loader": "^5.0.2",
     "html-webpack-plugin": "^3.2.0",
     "json-loader": "^0.5.7",
+    "karma": "^4.4.1",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-cli": "^2.0.0",
+    "karma-jasmine": "^2.0.1",
+    "karma-spec-reporter": "0.0.32",
+    "karma-webpack": "^4.0.2",
     "sass": "^1.23.7",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.1",
