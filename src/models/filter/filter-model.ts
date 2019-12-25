@@ -1,4 +1,4 @@
-import { FilterConfig } from "./filter-config-item";
+import {FilterConfig} from "./filter-config-item";
 import {BaseModel} from "../base-model";
 
 export enum FilterModelProperty {
@@ -8,17 +8,17 @@ export enum FilterModelProperty {
     selectMax = 'selectMax',
 }
 
-export class FilterModel<T> extends BaseModel{
+export class FilterModel<T> extends BaseModel {
     private filteredData: T[];
     private data: T[];
-    private filterModel: FilterConfig;
+    private filterConfig: FilterConfig;
 
     constructor() {
         super()
     }
 
-    initNewData(data: T[], model: FilterConfig):void {
-        this.filterModel = model;
+    initNewData(data: T[], model: FilterConfig): void {
+        this.filterConfig = model;
         this.data = data;
         this.calculateRange();
         this.filter();
@@ -28,49 +28,49 @@ export class FilterModel<T> extends BaseModel{
         return this.filteredData;
     }
 
-    public getFilterModel():FilterConfig {
-        return this.filterModel;
+    public getFilterModel(): FilterConfig {
+        return this.filterConfig;
     }
 
-    public setFilterModelProperty(property: string, type: FilterModelProperty, value: number):void {
-        this.filterModel[property][type] = value;
+    public setFilterModelProperty(property: string, type: FilterModelProperty, value: number): void {
+        this.filterConfig[property][type] = value;
     }
 
-    public getFilterModelValue(property: string, type: FilterModelProperty):number {
-        return this.filterModel[property][type];
+    public getFilterModelValue(property: string, type: FilterModelProperty): number {
+        return this.filterConfig[property][type];
     }
 
-    public resetFilter(property: string):void {
-        this.filterModel[property].selectMin = this.filterModel[property].min;
-        this.filterModel[property].selectMax = this.filterModel[property].max;
+    public resetFilter(property: string): void {
+        this.filterConfig[property].selectMin = this.filterConfig[property].min;
+        this.filterConfig[property].selectMax = this.filterConfig[property].max;
     }
 
-    public filter():void {
+    public filter(): void {
         let self = this;
         this.filteredData = this.data.filter(item => {
-            return Object.keys(this.filterModel).every(key => {
-                return (item[key] <= self.filterModel[key].selectMax) && (item[key] >= self.filterModel[key].selectMin);
+            return Object.keys(this.filterConfig).every(key => {
+                return (item[key] <= self.filterConfig[key].selectMax) && (item[key] >= self.filterConfig[key].selectMin);
             });
         });
     };
 
-    private calculateRange():void {
+    private calculateRange(): void {
         this.data.forEach(item => {
-            Object.keys(this.filterModel).forEach(key => {
-                if (item[key] > this.filterModel[key].max) {
-                    this.filterModel[key].max = item[key]
+            Object.keys(this.filterConfig).forEach(key => {
+                if (item[key] > this.filterConfig[key].max) {
+                    this.filterConfig[key].max = item[key]
                 }
 
-                if (item[key] < this.filterModel[key].min) {
-                    this.filterModel[key].min = item[key]
+                if (item[key] < this.filterConfig[key].min) {
+                    this.filterConfig[key].min = item[key]
                 }
             })
-         });
-         Object.keys(this.filterModel).forEach(key => {
-            this.filterModel[key].max = Math.ceil(this.filterModel[key].max);
-            this.filterModel[key].min = Math.floor(this.filterModel[key].min);
-            this.filterModel[key].selectMax= this.filterModel[key].max;
-            this.filterModel[key].selectMin = this.filterModel[key].min;
+        });
+        Object.keys(this.filterConfig).forEach(key => {
+            this.filterConfig[key].max = Math.ceil(this.filterConfig[key].max);
+            this.filterConfig[key].min = Math.floor(this.filterConfig[key].min);
+            this.filterConfig[key].selectMax = this.filterConfig[key].max;
+            this.filterConfig[key].selectMin = this.filterConfig[key].min;
         })
     }
 }
